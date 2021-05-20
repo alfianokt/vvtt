@@ -35,21 +35,18 @@ jobs:
     - name: Install dependencies
       run: yarn install --frozen-lockfile
 
-    # - name: Set ENV
-    - run: BUILD_PATH=".gh-pages"
-    - run: BASE_URL=${{ github.event.repository.name }}
-    - run: BASE_URL_ODIR="${BUILD_PATH}/${BASE_URL}"
+    - run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
+      shell: bash
 
     - name: Build
-      run: yarn build
+      run: npx vue-tsc --noEmit && vite build --base=${GITHUB_REPOSITORY}
 
-    # - name: Copy file
-    #   run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
+    - name: Copy file
+      run: cp -R "dist/index.html" "dist/400.html"
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        # publish_dir: ${BUILD_PATH}
         publish_dir: dist
       env:
         CI: true
