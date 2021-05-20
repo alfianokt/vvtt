@@ -43,12 +43,13 @@ jobs:
     - name: Build
       run: yarn build
 
-    - name: Copy file
-      run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
+    # - name: Copy file
+    #   run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${BUILD_PATH}
+        # publish_dir: ${BUILD_PATH}
+        publish_dir: dist
       env:
         CI: true
