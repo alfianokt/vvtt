@@ -40,8 +40,8 @@ jobs:
     - run: BASE_URL=${{ github.event.repository.name }}
     - run: BASE_URL_ODIR="${BUILD_PATH}/${BASE_URL}"
 
-    - name: Build Advanced
-      run: BASE_URL="${BASE_URL}" && BASE_URL_ODIR="${BASE_URL_ODIR}" && npx vue-tsc --noEmit && npx vite build --outDir=${BASE_URL_ODIR} --base=${BASE_URL}
+    - name: Build
+      run: yarn build
 
     - name: Copy file
       run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
