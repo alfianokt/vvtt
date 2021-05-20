@@ -1,0 +1,37 @@
+name: Deploying app to github pages
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Deploying app to github pages
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Cache NPM dependencies
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.OS }}-npm-cache
+        restore-keys: |
+          ${{ runner.OS }}-npm-cache
+    # - name: Set ENV
+    - run: BUILD_PATH=".gh-pages"
+    - run: BASE_URL=${{ github.event.repository.name }}
+    - run: BASE_URL_ODIR="${BUILD_PATH}/${BASE_URL}"
+    - run: mkdir ${BUILD_PATH}
+    # - name: Bundle App
+    - run: npm install
+    - run: npm run build:adv
+    - run: cp -R ${BUILD_PATH}/index.html ${BUILD_PATH}/400.html
+    - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${BUILD_PATH}
+      env:
+        CI: true
