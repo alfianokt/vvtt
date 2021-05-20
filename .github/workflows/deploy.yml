@@ -15,22 +15,36 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
-    - name: Cache NPM dependencies
+
+    - name: Get yarn cache directory
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Set dependencies cache
       uses: actions/cache@v2
       with:
-        path: node_modules
-        key: ${{ runner.OS }}-npm-cache
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-${{ matrix.node_version }}-${{ hashFiles('yarn.lock') }}
         restore-keys: |
-          ${{ runner.OS }}-npm-cache
+          ${{ runner.os }}-${{ matrix.node_version }}-${{ hashFiles('yarn.lock') }}
+          ${{ runner.os }}-${{ matrix.node_version }}-
+
+    - name: Versions
+      run: yarn versions
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
     # - name: Set ENV
     - run: BUILD_PATH=".gh-pages"
     - run: BASE_URL=${{ github.event.repository.name }}
     - run: BASE_URL_ODIR="${BUILD_PATH}/${BASE_URL}"
-    # - run: mkdir "${BUILD_PATH}"
-    # - name: Bundle App
-    - run: npm install
-    - run: npm run build:adv
-    - run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
+
+    - name: Build Advanced
+      run: yarn run build:adv
+
+    - name: Copy file
+      run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
