@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "build:adv": "vue-tsc --noEmit && vite build --outDir=${BASE_URL_ODIR} --base=${BASE_URL}",
+    "build:adv": "vue-tsc --noEmit && vite build --base=${BASE_URL}",
     "serve": "vite preview"
   },
   "dependencies": {

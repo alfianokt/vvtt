@@ -35,11 +35,8 @@ jobs:
     - name: Install dependencies
       run: yarn install --frozen-lockfile
 
-    - run: echo ::set-env name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')
-      shell: bash
-
     - name: Build
-      run: npx vue-tsc --noEmit && vite build --base=${GITHUB_REPOSITORY}
+      run: npx vue-tsc --noEmit && npx vite build --base=${{ github.event.repository.name }}
 
     - name: Copy file
       run: cp -R "dist/index.html" "dist/400.html"
