@@ -26,11 +26,11 @@ jobs:
     - run: BUILD_PATH=".gh-pages"
     - run: BASE_URL=${{ github.event.repository.name }}
     - run: BASE_URL_ODIR="${BUILD_PATH}/${BASE_URL}"
-    - run: mkdir ${BUILD_PATH}
+    - run: mkdir "${BUILD_PATH}"
     # - name: Bundle App
     - run: npm install
     - run: npm run build:adv
-    - run: cp -R ${BUILD_PATH}/index.html ${BUILD_PATH}/400.html
+    - run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
