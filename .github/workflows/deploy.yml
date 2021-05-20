@@ -41,7 +41,7 @@ jobs:
     - run: BASE_URL_ODIR="${BUILD_PATH}/${BASE_URL}"
 
     - name: Build Advanced
-      run: yarn run build:adv
+      run: BASE_URL="${BASE_URL}" && BASE_URL_ODIR="${BASE_URL_ODIR}" && npx vue-tsc --noEmit && npx vite build --outDir=${BASE_URL_ODIR} --base=${BASE_URL}
 
     - name: Copy file
       run: cp -R "${BUILD_PATH}/index.html" "${BUILD_PATH}/400.html"
